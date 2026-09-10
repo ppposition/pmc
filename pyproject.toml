@@ -1,0 +1,65 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cfg-norm-clamped-eval"
+version = "0.1.0"
+description = "Classifier-free guidance generation and evaluation for SiT and SD3.5"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {file = "LICENSE.txt"}
+dependencies = [
+    "torch",
+    "torchvision",
+    "numpy",
+    "scipy",
+    "Pillow",
+    "tqdm",
+    "matplotlib",
+    "timm",
+    "torchdiffeq",
+    "diffusers",
+    "transformers",
+    "accelerate",
+    "sentencepiece",
+    "protobuf",
+    "huggingface-hub",
+    "safetensors",
+    "clean-fid",
+    "image-reward",
+    "pyarrow",
+]
+
+[project.optional-dependencies]
+imagenet = ["tensorflow[and-cuda]"]
+
+[dependency-groups]
+dev = ["pytest>=8", "ruff>=0.11"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]
+
+[tool.ruff.lint.per-file-ignores]
+# Environment configuration, Matplotlib backends, and compatibility patches
+# must execute before the affected third-party imports.
+"src/cfg_norm_clamped_eval/eval_metrics.py" = ["E402"]
+"src/cfg_norm_clamped_eval/eval_image_reward.py" = ["E402"]
+"src/cfg_norm_clamped_eval/analyze_cfg_gap.py" = ["E402"]
+"src/cfg_norm_clamped_eval/sd35_cfg_gap.py" = ["E402"]
+# Preserve the compact mathematical callables in the upstream SiT implementation.
+"src/cfg_norm_clamped_eval/models.py" = ["E731"]
+"src/cfg_norm_clamped_eval/transport/transport.py" = ["E731"]
+# Re-export the transport API used by callers.
+"src/cfg_norm_clamped_eval/transport/__init__.py" = ["F401"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

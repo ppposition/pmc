@@ -1,0 +1,4 @@
+include LICENSE.txt README.md requirements*.txt
+include .editorconfig .gitignore .python-version uv.lock
+recursive-include scripts *.sh
+recursive-include tests *.py
